@@ -6,6 +6,8 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import android.app.AlertDialog
+import android.content.DialogInterface
 
 class GameActivity : AppCompatActivity() {
 
@@ -100,16 +102,43 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
+    private fun showWinDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Вітаємо!")
+        builder.setMessage("Ви виграли гру!")
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss() // Закрити діалог
+            finish()  // Повернутися до головного меню
+        })
+        builder.setCancelable(false) // Заборонити закриття діалогу через натискання поза ним
+        builder.show()
+    }
+
+    private fun showLoseDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Гру закінчено")
+        builder.setMessage("Ви програли. Спробуйте ще раз!")
+        builder.setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+            dialog.dismiss() // Закрити діалог
+            finish()  // Повернутися до головного меню
+        })
+        builder.setCancelable(false)
+        builder.show()
+    }
+
     private fun checkAnswer(selectedAnswer: Int) {
         if (selectedAnswer == correctAnswerIndex) {
-            currentMoney += 100
+            currentMoney += 100  // Додаємо гроші
             earnedMoneyText.text = "Виграно: ${currentMoney}$"
             Toast.makeText(this, "Правильна відповідь!", Toast.LENGTH_SHORT).show()
-            questionIndex++
-            setQuestion()
+            questionIndex++  // Переходити до наступного запитання
+            if (questionIndex == questions.size) {
+                showWinDialog() // Показуємо вікно виграшу, коли всі питання відповіли
+            } else {
+                setQuestion()  // Оновлюємо запитання
+            }
         } else {
-            Toast.makeText(this, "Неправильна відповідь. Ви програли.", Toast.LENGTH_SHORT).show()
-            finishGame()
+            showLoseDialog() // Показуємо вікно програшу
         }
     }
 
