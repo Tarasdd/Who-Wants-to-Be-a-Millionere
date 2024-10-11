@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/question_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Питання"
+        android:textSize="18sp"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/answer_1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/answer_2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/answer_3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/answer_4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/earned_money_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Виграно: 0$"
+        android:textSize="16sp"
+        android:layout_marginBottom="24dp"/>
+
+    <CheckBox
+        android:id="@+id/fifty_fifty_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="50/50"
+        android:layout_marginBottom="24dp"/>
+
+    <Button
+        android:id="@+id/take_money_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Забрати гроші"/>
+</LinearLayout>
+
+
+
+
+
+
