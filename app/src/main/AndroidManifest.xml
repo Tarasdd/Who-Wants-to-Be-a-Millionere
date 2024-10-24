@@ -26,11 +26,17 @@
         <activity
             android:name=".GameActivity"
             android:exported="true"
-            android:label="Game">
+            android:label="Game"
+            android:theme="@style/Theme.MillionareGame">
         </activity>
-        <activity android:name=".SettingsActivity" />
+
+        <activity android:name=".SettingsActivity"
+            android:theme="@style/Theme.MillionareGame"/>
+
+        <service
+            android:name=".QuestionService"
+            android:exported="false" />
 
     </application>
 
 </manifest>
-
