@@ -9,12 +9,14 @@ import android.os.Looper
 import android.util.Log
 import java.io.BufferedReader
 import java.io.InputStreamReader
+import java.util.concurrent.Executors
 
 class QuestionService : Service() {
 
     private val binder = LocalBinder()
     private val observers = mutableListOf<QuestionObserver>()
-    private val handler = Handler(Looper.getMainLooper()) // Додаємо Handler для роботи з UI
+    private val handler = Handler(Looper.getMainLooper()) // Handler для роботи з основним потоком
+    private val executorService = Executors.newSingleThreadExecutor() // Пул потоків
 
     inner class LocalBinder : Binder() {
         fun getService(): QuestionService = this@QuestionService
@@ -24,7 +26,7 @@ class QuestionService : Service() {
         return binder
     }
 
-    // Реєструємо спостерігачів
+    // Реєстрація спостерігачів
     fun registerObserver(observer: QuestionObserver) {
         observers.add(observer)
     }
@@ -33,9 +35,9 @@ class QuestionService : Service() {
         observers.remove(observer)
     }
 
-    // Метод для завантаження питань з текстового файлу
+    // Метод для завантаження питань з файлу за допомогою ExecutorService
     fun loadQuestions() {
-        Thread {
+        executorService.execute {
             val questions = mutableListOf<Pair<String, List<String>>>()
             val answers = mutableListOf<Int>()
             try {
@@ -55,21 +57,25 @@ class QuestionService : Service() {
                 }
                 reader.close()
 
-                // Сповіщення всіх спостерігачів про нові питання
+                // Сповіщення спостерігачів на основному потоці
                 notifyObservers(questions, answers)
 
             } catch (e: Exception) {
                 Log.e("QuestionService", "Error reading questions file", e)
             }
-        }.start()
+        }
     }
 
-    // Сповіщуємо спостерігачів
+    // Сповіщення спостерігачів про завантаження питань
     private fun notifyObservers(questions: List<Pair<String, List<String>>>, answers: List<Int>) {
-        // Викликаємо onQuestionsLoaded на основному потоці
         handler.post {
             observers.forEach { it.onQuestionsLoaded(questions, answers) }
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        executorService.shutdown() // Закриваємо пул потоків при зупинці сервісу
     }
 
     interface QuestionObserver {
